@@ -1,0 +1,14 @@
+title: 'Lorem'
+stylesheets: 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css', 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'
+scripts: 'https://cdn.jsdelivr.net/npm/vue'
+
+Title (
+	content: 'Lorem ipsum'
+	test: 'test'
+)
+
+Paragraph (
+	content: 'Dolor sit amet, consectetur adipiscing elit. Curabitur tincidunt diam id nulla tempor viverra id a magna. Vivamus vel orci urna. Nullam eget ornare erat. Vestibulum mattis consequat augue eu accumsan. Phasellus scelerisque augue sed tortor tempor, at feugiat mi lobortis. Vestibulum venenatis a arcu at varius. Proin consequat iaculis sem. Ut a venenatis nulla, sit amet pulvinar nisi. Suspendisse commodo volutpat vestibulum. Cras vulputate dui nec enim facilisis, eu bibendum risus porttitor. Nam eleifend magna est, a aliquam odio cursus non. Fusce est nibh, hendrerit non ullamcorper rutrum, consectetur at tellus. Suspendisse eu semper nulla, non ornare lacus. Praesent nec gravida nibh, ac faucibus ligula. Proin vitae condimentum felis, eu fringilla magna.'
+)
+
+Title

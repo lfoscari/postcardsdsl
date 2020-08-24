@@ -1,0 +1,85 @@
+#!/usr/bin/env python3
+
+import sys
+import re
+from parsita import *
+
+class OvenParser(TextParsers, whitespace=r'[\s]*'):
+    # Building blocks
+    name = reg(r'[A-Za-z0-9]+')
+    value = "'" >> reg(r'[^\']*') << "'"
+    values = repsep(value, ',') > ( lambda l: l[0] if len(l) == 1 else l )
+
+    # Global assignments
+    assignment = name << ':' & values
+    glob = rep(assignment) > dict
+
+    # Lingot
+    lingot_body = '(' >> rep1(assignment) << ')' > dict
+    lingot = name & opt(lingot_body) > (lambda l: {'name': l[0], 'values': l[1:][0]})
+
+    # It's all coming together
+    document = glob & rep(lingot)
+
+usage = """usage: yadda yadda yadda"""
+nuggets_directory = 'nuggets/'
+html_wrapper = 'html.nug'
+output_file = 'result.html'
+
+STYLESHEET = '<link rel="stylesheet" type="text/css" href="{}">'
+SCRIPT = '<script type="text/javascript" src="{}"></script>'
+
+def substitute_special(member, template, source):
+    if isinstance(source[member], list):
+        return '\n'.join([ template.format(s) for s in source[member] ])
+    return template.format(source[member])
+
+def main():
+    if len(sys.argv) < 2:
+        print(usage)
+        exit()
+
+    # Read and parse file
+    with open(sys.argv[1], 'r') as instructions:
+        parsing = OvenParser.document.parse(instructions.read())
+        if isinstance(parsing, Success):
+            global_assignments, lingots = parsing.value
+        else:
+            print("Parsing filed: " + parsing.message)
+            exit()
+
+        result = []
+
+        # For each lingot load the file
+        for lingot in lingots:
+            lingot_file = '{}{}.nug'.format(nuggets_directory, lingot['name'])
+            template = open(lingot_file, 'r').read().strip()
+
+            # Substitute variables
+            if len(lingot['values']) > 0: # Check if there are any variables assignments
+                template = template.format(**lingot['values'][0])
+            result.append(template)
+
+        # Concatenate everything
+        result = '\n\t\t'.join(result)
+
+        # Read HTML wrapper
+        HTML = open(html_wrapper, 'r').read()
+
+        # Build stylesheets
+        global_assignments['stylesheets'] = substitute_special('stylesheets', STYLESHEET, global_assignments)
+
+        # Build scripts
+        global_assignments['scripts'] = substitute_special('scripts', SCRIPT, global_assignments)
+
+        # Wrap around with an HTML shell with the correct values
+        result = HTML.format(**{**global_assignments, 'content': result})
+
+        # Save the page in a file called result.html
+        open(output_file, 'w').write(result)
+
+        # Exit
+        print('Everything went according to plan, check {}'.format(output_file))
+
+if __name__ == '__main__':
+    main()
