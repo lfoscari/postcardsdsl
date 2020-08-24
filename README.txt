@@ -45,3 +45,6 @@ scripts: 'https://cdn.jsdelivr.net/npm/vue'
 Title (
 	content: 'Just trying out oven'
 )
+
+
+note: stylesheets and scripts are particular variables, because are in fact hidden nuggets, each url under these variables is wrapper around a <link> or a <script> tag. This feature is at the moment hard coded.
