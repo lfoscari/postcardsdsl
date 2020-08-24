@@ -8,3 +8,40 @@ Inside the .lin file the user specifies which nugget are present and in what ord
 Future improvements:
 - Add support for multiple pages
 - Recursive nuggets
+
+How to use
+----------
+
+In the nuggets/ directory create a file for each lingo you need, the templating language is very basic, instead of the actual value inside the tags, write '{variable}'.
+
+In the root directory you need an html.nug file, which contains the general structure of your HTML page, the variable used here are the so-called global variables of your oven file, only one variable is mandatory: the {content} variable, where the nuggets will be injected.
+
+Now create a file .oven, start by writing the values of the global variables, then for each lingot write the lingot's name in a new line, and if there are variables to assign, write inside a pair round brackets the assignments, with the same syntax as the global ones.
+
+To build everything together go to the project's root directory and run
+$ ./oven example.oven
+
+==> Example nuggets/title.nug
+<h1>{content}</h1>
+
+==> Example html.nug
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{title}</title>
+		{stylesheets}
+	</head>
+	</body>
+		{content}
+		{scripts}
+	</body>
+</html>
+
+==> Example example.oven
+title: 'Lorem'
+stylesheets: 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css', 'https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap'
+scripts: 'https://cdn.jsdelivr.net/npm/vue'
+
+Title (
+	content: 'Just trying out oven'
+)
